@@ -29,7 +29,7 @@ struct RangeQueryer {
 }
 
 #[derive(Debug)]
-enum IntersectionResult {
+enum OverlapResult {
     Contains(Range),
     Slices(Range, Slice),
     NoOverlap
@@ -55,7 +55,7 @@ impl RangeQueryer {
     }
 
     fn query(&self, trg: &Range) -> Vec<Range>{
-        use IntersectionResult::*;
+        use OverlapResult::*;
         use Slice::*;
         
         let mut results = vec![];
@@ -63,7 +63,7 @@ impl RangeQueryer {
         self.src_ranges.iter().zip(self.dst_ranges.iter()).for_each(|(src, dst)| {
             let mut new_unconsumed = vec![];
             unconsumed.iter().for_each(|range| {
-                match src.intersection(&range) {
+                match src.overlap(&range) {
                     Contains(offset) => results.push(dst.map_offset(&offset)),
                     Slices(offset, Single(unmatched) ) => {
                                                             results.push(dst.map_offset(&offset)); 
@@ -85,8 +85,8 @@ impl RangeQueryer {
 }
 
 impl Range {
-    fn intersection(&self, target: &Self) -> IntersectionResult {
-        use IntersectionResult::*;
+    fn overlap(&self, target: &Self) -> OverlapResult {
+        use OverlapResult::*;
         use Slice::*;
         if self.start <= target.start {
             let offset = target.start - self.start;
