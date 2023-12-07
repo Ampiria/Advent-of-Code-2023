@@ -14,6 +14,7 @@ fn parse_tagged_num(t: &str, line: &str) -> i64{
             .parse::<i64>().expect("should be a number")
 }
 
+//calculate lower and upper limits using quadratic formula such that lower <= hold < upper
 fn calculate_hold_time(t: i64 , d: i64) -> (u64, u64) {
     let tsquared = t.pow(2) as f64;
     let fourac = (4 * d) as f64; 
