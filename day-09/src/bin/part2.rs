@@ -31,7 +31,7 @@ fn next_value(seq: Vec<i32>) -> i32 {
         .rev()
         .skip(1)
         .fold(0, |diff, s| {
-            s.first().unwrap() + diff
+            s.first().unwrap() - diff
         })
 }
 

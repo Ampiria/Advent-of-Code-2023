@@ -47,7 +47,7 @@ fn gear_ratio(grid: &Vec<String>, r: usize, c: usize) -> i32 {
     
     for i in rmin..rmax {
         for j in cmin..cmax {
-            let d = grid.get(i ).unwrap().chars().nth(j).unwrap();
+            let d = grid.get(i).unwrap().chars().nth(j).unwrap();
             
             if d.is_numeric() {
                 match get_full_num(grid, i , j , &mut visited) {
