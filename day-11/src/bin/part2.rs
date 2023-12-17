@@ -35,11 +35,10 @@ fn part2(input: &str) -> isize{
     ).collect();
     
     let galaxy_count = galaxies.len();
-    let mut skew = 0;
     let increment = 999_999;
     
     //Iterate over the rows; whenever we find an empty row, increment subsequent galaxy row coords
-    graph.iter().enumerate().for_each(|(row, line)| {
+    graph.iter().enumerate().fold(0, |skew, (row, line)| {
         if line.iter().all(|x| *x == Space::Empty){
             galaxies = galaxies.iter().map(|(r, c)| {
                 if *r > row as isize + skew  {
@@ -48,15 +47,15 @@ fn part2(input: &str) -> isize{
                     (*r, *c)
                 }
             }).collect();
-            skew += increment;
+            skew + increment
+        } else {
+            skew
         }
     });
-
-    skew = 0;
     //Iterate over the cols; whenever we find an empty col, increment subsequent galaxy col coords
     (0..graph[0].len()) // transpose 
         .map(|i| graph.iter().map(|line| line[i]).collect::<Vec<Space>>())
-        .enumerate().for_each(|(col, line)|{
+        .enumerate().fold(0, |skew, (col, line): (usize, Vec<Space>)|{
             if line.iter().all(|x| *x == Space::Empty){
                 galaxies = galaxies.iter().map(|(r, c)| {
                 if *c > col as isize + skew {
@@ -65,7 +64,9 @@ fn part2(input: &str) -> isize{
                     (*r, *c)
                 }
                 }).collect();
-                skew += increment;
+                skew + increment
+            } else {
+                skew
             }
         });
 
